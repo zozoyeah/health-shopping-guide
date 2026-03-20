@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生态采购地图 - 不教你懂有机，只帮你买对东西</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #F7F5F0;
+            --color-bg-dark: #2C3E2D;
+            --color-primary: #4A6741;
+            --color-primary-dark: #3D5336;
+            --color-accent: #D4A574;
+            --color-accent-warm: #C4956A;
+            --color-text: #2C2C2C;
+            --color-text-light: #6B6B6B;
+            --color-text-inverse: #F7F5F0;
+            --color-card: #FFFFFF;
+            --color-card-hover: #FFFEF9;
+            --color-border: #E5E0D5;
+            --shadow-soft: 0 4px 20px rgba(74, 103, 65, 0.08);
+            --shadow-hover: 0 12px 40px rgba(74, 103, 65, 0.15);
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', -apple-system, sans-serif;
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Organic Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(74, 103, 65, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(212, 165, 116, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(74, 103, 65, 0.02) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Header */
+        header {
+            padding: 60px 40px 40px;
+            text-align: center;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        .logo-text {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--color-primary-dark);
+        }
+
+        .tagline {
+            font-size: 18px;
+            color: var(--color-text-light);
+            font-weight: 300;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .tagline strong {
+            color: var(--color-accent-warm);
+            font-weight: 600;
+        }
+
+        /* Main Navigation */
+        .nav-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+
+        .nav-card {
+            background: var(--color-card);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow-soft);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease-out backwards;
+        }
+
+        .nav-card:nth-child(1) { animation-delay: 0.1s; }
+        .nav-card:nth-child(2) { animation-delay: 0.2s; }
+        .nav-card:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .nav-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .nav-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .nav-card-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, rgba(74, 103, 65, 0.1) 0%, rgba(212, 165, 116, 0.1) 100%);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .nav-card-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+
+        .nav-card-desc {
+            font-size: 14px;
+            color: var(--color-text-light);
+            line-height: 1.7;
+        }
+
+        .nav-card-items {
+            margin-top: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .nav-item-tag {
+            font-size: 12px;
+            padding: 6px 12px;
+            background: var(--color-bg);
+            border-radius: 20px;
+            color: var(--color-primary);
+            transition: all 0.3s ease;
+        }
+
+        .nav-card:hover .nav-item-tag {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        /* Priority Section */
+        .priority-section {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 40px 60px;
+        }
+
+        .section-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 24px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 32px;
+            color: var(--color-text);
+        }
+
+        .priority-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .priority-item {
+            background: var(--color-card);
+            border-radius: var(--radius-md);
+            padding: 24px 32px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            animation: fadeInLeft 0.5s ease-out backwards;
+        }
+
+        .priority-item:nth-child(1) { animation-delay: 0.1s; }
+        .priority-item:nth-child(2) { animation-delay: 0.2s; }
+        .priority-item:nth-child(3) { animation-delay: 0.3s; }
+        .priority-item:nth-child(4) { animation-delay: 0.4s; }
+        .priority-item:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .priority-item:hover {
+            transform: translateX(8px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .priority-rank {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .priority-item:nth-child(1) .priority-rank {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: white;
+        }
+
+        .priority-item:nth-child(2) .priority-rank {
+            background: linear-gradient(135deg, #C0C0C0 0%, #A8A8A8 100%);
+            color: white;
+        }
+
+        .priority-item:nth-child(3) .priority-rank {
+            background: linear-gradient(135deg, #CD7F32 0%, #B87333 100%);
+            color: white;
+        }
+
+        .priority-item:nth-child(n+4) .priority-rank {
+            background: var(--color-bg);
+            color: var(--color-text-light);
+        }
+
+        .priority-content {
+            flex: 1;
+        }
+
+        .priority-title {
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .priority-reason {
+            font-size: 14px;
+            color: var(--color-text-light);
+        }
+
+        .priority-action {
+            font-size: 13px;
+            color: var(--color-primary);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Platforms Section */
+        .platforms-section {
+            background: var(--color-bg-dark);
+            padding: 60px 40px;
+            margin-top: 40px;
+        }
+
+        .platforms-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .platforms-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--color-text-inverse);
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .platforms-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .platform-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            animation: fadeIn 0.5s ease-out backwards;
+        }
+
+        .platform-card:nth-child(1) { animation-delay: 0.1s; }
+        .platform-card:nth-child(2) { animation-delay: 0.15s; }
+        .platform-card:nth-child(3) { animation-delay: 0.2s; }
+        .platform-card:nth-child(4) { animation-delay: 0.25s; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .platform-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .platform-name {
+            font-weight: 600;
+            font-size: 18px;
+            color: var(--color-text-inverse);
+            margin-bottom: 8px;
+        }
+
+        .platform-role {
+            font-size: 13px;
+            color: var(--color-accent);
+            margin-bottom: 12px;
+        }
+
+        .platform-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+        }
+
+        .platform-tag {
+            font-size: 11px;
+            padding: 4px 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Quick Links */
+        .quick-links {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .quick-link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quick-link-btn:hover {
+            background: var(--color-primary-dark);
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--color-text-light);
+            font-size: 13px;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .nav-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .platforms-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 40px 20px 20px;
+            }
+
+            .nav-section, .priority-section, .platforms-section, .quick-links {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .platforms-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .priority-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--color-card);
+            border-radius: var(--radius-lg);
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 40px;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: var(--color-bg);
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .modal-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--color-text);
+        }
+
+        .modal-body {
+            color: var(--color-text-light);
+            line-height: 1.8;
+        }
+
+        .modal-body h4 {
+            color: var(--color-text);
+            font-size: 16px;
+            margin: 20px 0 10px;
+        }
+
+        .modal-body ul {
+            padding-left: 20px;
+        }
+
+        .modal-body li {
+            margin-bottom: 8px;
+        }
+
+        .modal-cta {
+            display: inline-block;
+            margin-top: 24px;
+            padding: 12px 24px;
+            background: var(--color-primary);
+            color: white;
+            border-radius: 25px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-cta:hover {
+            background: var(--color-primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <div class="logo-icon">🌿</div>
+            <span class="logo-text">生态采购地图</span>
+        </div>
+        <p class="tagline">不教你懂<strong>有机</strong>，只帮你买<strong>对东西</strong></p>
+    </header>
+
+    <section class="nav-section">
+        <div class="nav-grid">
+            <div class="nav-card" onclick="showModal('problem')">
+                <div class="nav-card-icon">🎯</div>
+                <h3 class="nav-card-title">我现在最该换什么</h3>
+                <p class="nav-card-desc">不知道从哪开始？从最值得的先换起</p>
+                <div class="nav-card-items">
+                    <span class="nav-item-tag">食用油</span>
+                    <span class="nav-item-tag">调味品</span>
+                    <span class="nav-item-tag">米面</span>
+                    <span class="nav-item-tag">牛奶</span>
+                </div>
+            </div>
+
+            <div class="nav-card" onclick="showModal('category')">
+                <div class="nav-card-icon">🛒</div>
+                <h3 class="nav-card-title">我要买xxx，怎么选</h3>
+                <p class="nav-card-desc">有明确品类需求？快速找到选购要点</p>
+                <div class="nav-card-items">
+                    <span class="nav-item-tag">食用油</span>
+                    <span class="nav-item-tag">调味品</span>
+                    <span class="nav-item-tag">牛奶</span>
+                    <span class="nav-item-tag">肉类</span>
+                </div>
+            </div>
+
+            <div class="nav-card" onclick="showModal('lifestyle')">
+                <div class="nav-card-icon">👤</div>
+                <h3 class="nav-card-title">按我的情况选</h3>
+                <p class="nav-card-desc">忙碌上班族？品质优先？找到适合你的路径</p>
+                <div class="nav-card-items">
+                    <span class="nav-item-tag">忙碌上班族</span>
+                    <span class="nav-item-tag">品质优先型</span>
+                    <span class="nav-item-tag">性价比型</span>
+                    <span class="nav-item-tag">有孩子家庭</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="priority-section">
+        <h2 class="section-title">⭐ 最值得优先升级的5样东西</h2>
+        <div class="priority-list">
+            <div class="priority-item" onclick="showModal('oil')">
+                <div class="priority-rank">1</div>
+                <div class="priority-content">
+                    <div class="priority-title">食用油</div>
+                    <div class="priority-reason">天天都用，对全家健康影响大，改善效果明显</div>
+                </div>
+                <div class="priority-action">了解选购要点 →</div>
+            </div>
+
+            <div class="priority-item" onclick="showModal('seasoning')">
+                <div class="priority-rank">2</div>
+                <div class="priority-content">
+                    <div class="priority-title">调味品（酱油、醋）</div>
+                    <div class="priority-reason">容易被忽略，使用频率高，升级空间大</div>
+                </div>
+                <div class="priority-action">了解选购要点 →</div>
+            </div>
+
+            <div class="priority-item" onclick="showModal('grain')">
+                <div class="priority-rank">3</div>
+                <div class="priority-content">
+                    <div class="priority-title">主食/杂粮</div>
+                    <div class="priority-reason">膳食纤维主要来源，每天都会吃的基础食物</div>
+                </div>
+                <div class="priority-action">了解选购要点 →</div>
+            </div>
+
+            <div class="priority-item" onclick="showModal('milk')">
+                <div class="priority-rank">4</div>
+                <div class="priority-content">
+                    <div class="priority-title">牛奶</div>
+                    <div class="priority-reason">家庭刚需，营养差异大，品质容易感知</div>
+                </div>
+                <div class="priority-action">了解选购要点 →</div>
+            </div>
+
+            <div class="priority-item" onclick="showModal('meat')">
+                <div class="priority-rank">5</div>
+                <div class="priority-content">
+                    <div class="priority-title">肉类</div>
+                    <div class="priority-reason">品质差异大，对健康有影响</div>
+                </div>
+                <div class="priority-action">了解选购要点 →</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="platforms-section">
+        <div class="platforms-container">
+            <h2 class="platforms-title">🛒 推荐采购平台</h2>
+            <div class="platforms-grid">
+                <div class="platform-card" onclick="showModal('pulan')">
+                    <div class="platform-name">朴门星球</div>
+                    <div class="platform-role">厨房基础款补货站</div>
+                    <div class="platform-tags">
+                        <span class="platform-tag">食用油</span>
+                        <span class="platform-tag">调味品</span>
+                        <span class="platform-tag">性价比</span>
+                    </div>
+                </div>
+
+                <div class="platform-card" onclick="showModal('lvzhishou')">
+                    <div class="platform-name">绿手指</div>
+                    <div class="platform-role">品质严选</div>
+                    <div class="platform-tags">
+                        <span class="platform-tag">牛奶</span>
+                        <span class="platform-tag">肉类</span>
+                        <span class="platform-tag">品质优先</span>
+                    </div>
+                </div>
+
+                <div class="platform-card" onclick="showModal('yimi')">
+                    <div class="platform-name">一米市集</div>
+                    <div class="platform-role">综合一站式</div>
+                    <div class="platform-tags">
+                        <span class="platform-tag">杂粮</span>
+                        <span class="platform-tag">全品类</span>
+                        <span class="platform-tag">方便</span>
+                    </div>
+                </div>
+
+                <div class="platform-card" onclick="showModal('liangren')">
+                    <div class="platform-name">良人园子</div>
+                    <div class="platform-role">农场直供</div>
+                    <div class="platform-tags">
+                        <span class="platform-tag">时蔬</span>
+                        <span class="platform-tag">当季</span>
+                        <span class="platform-tag">本味</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="quick-links">
+        <button class="quick-link-btn" onclick="showModal('quick')">
+            🚀 立即开始：我的情况
+        </button>
+    </div>
+
+    <footer>
+        <p>生态采购地图 · 帮你建立更健康的家庭采购方式</p>
+    </footer>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <div id="modal-body-content"></div>
+        </div>
+    </div>
+
+    <script>
+        const modalData = {
+            problem: {
+                title: '我现在最该换什么',
+                content: `
+                    <div class="modal-body">
+                        <p>从最值得的开始，一次只换一类，用完再换新：</p>
+
+                        <h4>🥇 第一优先级：食用油</h4>
+                        <ul>
+                            <li>日常炒菜用双低菜籽油</li>
+                            <li>凉拌用特级初榨橄榄油</li>
+                            <li>先买一瓶开始试点</li>
+                        </ul>
+
+                        <h4>🥈 第二优先级：调味品</h4>
+                        <ul>
+                            <li>先换酱油和醋</li>
+                            <li>看配料表：越短越好</li>
+                            <li>注意：没有糖、添加剂、味精</li>
+                        </ul>
+
+                        <h4>🥉 第三优先级：主食/杂粮</h4>
+                        <ul>
+                            <li>开始吃糙米、燕麦米</li>
+                            <li>从每周1-2次开始</li>
+                        </ul>
+
+                        <a class="modal-cta" onclick="closeModal()">开始行动 →</a>
+                    </div>
+                `
+            },
+            category: {
+                title: '我要买xxx，怎么选',
+                content: `
+                    <div class="modal-body">
+                        <p>选择你想了解的品类：</p>
+
+                        <h4>🥇 食用油</h4>
+                        <p>日常炒菜用双低菜籽油，凉拌用特级初榨橄榄油</p>
+
+                        <h4>🥈 调味品</h4>
+                        <p>配料表越短越好，注意糖和添加剂</p>
+
+                        <h4>🥉 牛奶</h4>
+                        <p>巴氏奶比常温奶保留更多活性蛋白</p>
+
+                        <h4>🥩 肉类</h4>
+                        <p>看养殖方式，选择透明的产品</p>
+
+                        <a class="modal-cta" onclick="closeModal()">查看详情 →</a>
+                    </div>
+                `
+            },
+            lifestyle: {
+                title: '按我的情况选',
+                content: `
+                    <div class="modal-body">
+                        <h4>👔 忙碌上班族</h4>
+                        <p>推荐：朴门星球 + 一米市集组合</p>
+                        <p>策略：固定2个平台，每次只升级1个品类</p>
+
+                        <h4>✨ 品质优先型</h4>
+                        <p>推荐：绿手指 + 良人园子</p>
+                        <p>策略：不差钱，直接选最好的</p>
+
+                        <h4>💰 性价比优先型</h4>
+                        <p>推荐：朴门星球 + 一米市集</p>
+                        <p>策略：先从油和调味品开始</p>
+
+                        <h4>👶 有孩子家庭</h4>
+                        <p>推荐：绿手指 + 朴门星球</p>
+                        <p>策略：先关注入口的东西（油、奶、零食）</p>
+
+                        <a class="modal-cta" onclick="closeModal()">开始选择 →</a>
+                    </div>
+                `
+            },
+            oil: {
+                title: '食用油怎么选',
+                content: `
+                    <div class="modal-body">
+                        <h4>一句话决策</h4>
+                        <p style="font-size: 18px; color: var(--color-primary); font-weight: 500;">日常炒菜用双低菜籽油，凉拌用特级初榨橄榄油</p>
+
+                        <h4>选购看什么</h4>
+                        <ul>
+                            <li><strong>原料来源</strong>：转基因vs非转基因 → 选非转基因</li>
+                            <li><strong>工艺</strong>：浸出vs压榨 → 物理压榨更好</li>
+                            <li><strong>烟点</strong>：炒菜选烟点高的</li>
+                        </ul>
+
+                        <h4>不同人怎么选</h4>
+                        <ul>
+                            <li>新手省心型 → 双低菜籽油（性价比高）</li>
+                            <li>品质型 → 特级初榨橄榄油（营养最多）</li>
+                            <li>性价比型 → 大桶装（长期复购划算）</li>
+                        </ul>
+
+                        <h4>去哪买</h4>
+                        <p>朴门星球：油品全、性价比高<br>绿手指：品质优先</p>
+
+                        <a class="modal-cta" onclick="closeModal()">去选购 →</a>
+                    </div>
+                `
+            },
+            seasoning: {
+                title: '调味品怎么选',
+                content: `
+                    <div class="modal-body">
+                        <h4>一句话决策</h4>
+                        <p style="font-size: 18px; color: var(--color-primary); font-weight: 500;">先换酱油和醋，看配料表里有没有糖、添加剂、味精</p>
+
+                        <h4>酱油选购要点</h4>
+                        <ul>
+                            <li>配料表第一位：大豆/脱脂大豆</li>
+                            <li>氨基酸态氮：≥0.8g/100ml 为特级</li>
+                            <li>无额外添加糖：注意白砂糖</li>
+                        </ul>
+
+                        <h4>醋选购要点</h4>
+                        <ul>
+                            <li>酿造醋 > 配制醋</li>
+                            <li>总酸度：≥3.5g/100ml</li>
+                            <li>无添加色素</li>
+                        </ul>
+
+                        <h4>常见误区</h4>
+                        <ul>
+                            <li>✗ 儿童酱油 ≠ 更健康</li>
+                            <li>✗ 零添加 ≠ 完全没有问题</li>
+                            <li>✗ 价格高 ≠ 品质好</li>
+                        </ul>
+
+                        <a class="modal-cta" onclick="closeModal()">去选购 →</a>
+                    </div>
+                `
+            },
+            grain: {
+                title: '主食/杂粮怎么选',
+                content: `
+                    <div class="modal-body">
+                        <h4>一句话决策</h4>
+                        <p style="font-size: 18px; color: var(--color-primary); font-weight: 500;">优先选真空包装的糙米/燕麦米，看产区和生产日期</p>
+
+                        <h4>为什么重要</h4>
+                        <p>膳食纤维是健康饮食的关键，但现代人摄入严重不足</p>
+
+                        <h4>选购建议</h4>
+                        <ul>
+                            <li>优先选全谷物：糙米、燕麦米、荞麦</li>
+                            <li>看配料表：第一为"全谷物"即可</li>
+                            <li>选真空包装：保鲜效果好</li>
+                        </ul>
+
+                        <h4>行动建议</h4>
+                        <p>从每周1-2次糙米饭开始，逐步增加</p>
+
+                        <a class="modal-cta" onclick="closeModal()">去选购 →</a>
+                    </div>
+                `
+            },
+            milk: {
+                title: '牛奶怎么选',
+                content: `
+                    <div class="modal-body">
+                        <h4>一句话决策</h4>
+                        <p style="font-size: 18px; color: var(--color-primary); font-weight: 500;">巴氏奶比常温奶保留更多活性蛋白</p>
+
+                        <h4>选购看什么</h4>
+                        <ul>
+                            <li><strong>灭菌方式</strong>：巴氏奶 > 常温奶</li>
+                            <li><strong>蛋白质</strong>：≥3.0g/100ml 较好</li>
+                            <li><strong>钙</strong>：≥100mg/100ml</li>
+                        </ul>
+
+                        <h4>不同人怎么选</h4>
+                        <ul>
+                            <li>追求新鲜 → 巴氏奶（需冷藏）</li>
+                            <li>方便储存 → 常温奶（可囤货）</li>
+                            <li>乳糖不耐 → 舒化奶/酸奶</li>
+                        </ul>
+
+                        <h4>去哪买</h4>
+                        <p>绿手指：品质好<br>一米市集：品类全</p>
+
+                        <a class="modal-cta" onclick="closeModal()">去选购 →</a>
+                    </div>
+                `
+            },
+            meat: {
+                title: '肉类怎么选',
+                content: `
+                    <div class="modal-body">
+                        <h4>一句话决策</h4>
+                        <p style="font-size: 18px; color: var(--color-primary); font-weight: 500;">选养殖方式透明的，看饲料配方和养殖周期</p>
+
+                        <h4>选购优先级</h4>
+                        <ul>
+                            <li><strong>第一选择</strong>：有机的、散养的</li>
+                            <li><strong>第二选择</strong>：有养殖方式说明的</li>
+                            <li><strong>避免</strong>：来源不明的低价产品</li>
+                        </ul>
+
+                        <h4>部位选择</h4>
+                        <ul>
+                            <li>猪肉：优先选瘦肉，减少饱和脂肪</li>
+                            <li>牛肉：选部位，腱子肉性价比高</li>
+                            <li>鸡肉：鸡胸肉蛋白质高</li>
+                        </ul>
+
+                        <h4>去哪买</h4>
+                        <p>绿手指：品质好<br>丑美阿柑：特色肉类</p>
+
+                        <a class="modal-cta" onclick="closeModal()">去选购 →</a>
+                    </div>
+                `
+            },
+            pulan: {
+                title: '朴门星球',
+                content: `
+                    <div class="modal-body">
+                        <h4>平台定位</h4>
+                        <p style="font-size: 20px; font-weight: 500;">厨房基础款补货站</p>
+
+                        <h4>适合谁</h4>
+                        <ul>
+                            <li>想先从油和调味品开始升级的人</li>
+                            <li>注重性价比的人</li>
+                            <li>希望买得安心但不想太贵的人</li>
+                        </ul>
+
+                        <h4>最值得买</h4>
+                        <ul>
+                            <li>🥇 食用油 - 品类全、性价比高</li>
+                            <li>🥈 调味品 - 零添加、有机款都有</li>
+                            <li>🥉 厨房基础食材</li>
+                        </ul>
+
+                        <h4>平台特点</h4>
+                        <ul>
+                            <li>✅ 性价比高</li>
+                            <li>✅ 包装环保</li>
+                            <li>✅ 选品逻辑贴近日常</li>
+                            <li>❌ 蔬果品种不如专业农场</li>
+                        </ul>
+
+                        <a class="modal-cta" onclick="closeModal()">去逛逛 →</a>
+                    </div>
+                `
+            },
+            lvzhishou: {
+                title: '绿手指',
+                content: `
+                    <div class="modal-body">
+                        <h4>平台定位</h4>
+                        <p style="font-size: 20px; font-weight: 500;">品质严选</p>
+
+                        <h4>适合谁</h4>
+                        <ul>
+                            <li>品质优先的人</li>
+                            <li>愿意为好产品付溢价</li>
+                            <li>相信认证体系</li>
+                        </ul>
+
+                        <h4>最值得买</h4>
+                        <ul>
+                            <li>🥇 牛奶 - 品质最好</li>
+                            <li>🥈 肉类 - 养殖方式透明</li>
+                            <li>🥉 高端食材</li>
+                        </ul>
+
+                        <h4>平台特点</h4>
+                        <ul>
+                            <li>✅ 品质有保障</li>
+                            <li>✅ 认证体系完善</li>
+                            <li>❌ 价格偏高</li>
+                        </ul>
+
+                        <a class="modal-cta" onclick="closeModal()">去逛逛 →</a>
+                    </div>
+                `
+            },
+            yimi: {
+                title: '一米市集',
+                content: `
+                    <div class="modal-body">
+                        <h4>平台定位</h4>
+                        <p style="font-size: 20px; font-weight: 500;">综合一站式</p>
+
+                        <h4>适合谁</h4>
+                        <ul>
+                            <li>想一站式购齐</li>
+                            <li>追求方便快捷</li>
+                            <li>需要综合品类</li>
+                        </ul>
+
+                        <h4>最值得买</h4>
+                        <ul>
+                            <li>🥇 杂粮 - 品类最全</li>
+                            <li>🥈 调味品 - 选择多</li>
+                            <li>🥉 综合食材</li>
+                        </ul>
+
+                        <h4>平台特点</h4>
+                        <ul>
+                            <li>✅ 品类齐全</li>
+                            <li>✅ 配送方便</li>
+                            <li>✅ 适合日常补货</li>
+                        </ul>
+
+                        <a class="modal-cta" onclick="closeModal()">去逛逛 →</a>
+                    </div>
+                `
+            },
+            liangren: {
+                title: '良人园子',
+                content: `
+                    <div class="modal-body">
+                        <h4>平台定位</h4>
+                        <p style="font-size: 20px; font-weight: 500;">农场直供</p>
+
+                        <h4>适合谁</h4>
+                        <ul>
+                            <li>追求本味</li>
+                            <li>尊重季节</li>
+                            <li>喜欢当季食材</li>
+                        </ul>
+
+                        <h4>最值得买</h4>
+                        <ul>
+                            <li>🥇 时蔬 - 当季最好</li>
+                            <li>🥈 水果 - 风味浓郁</li>
+                            <li>🥉 特色农产品</li>
+                        </ul>
+
+                        <h4>平台特点</h4>
+                        <ul>
+                            <li>✅ 食材新鲜</li>
+                            <li>✅ 季节性强</li>
+                            <li>❌ 品种有限</li>
+                        </ul>
+
+                        <a class="modal-cta" onclick="closeModal()">去逛逛 →</a>
+                    </div>
+                `
+            },
+            quick: {
+                title: '立即开始',
+                content: `
+                    <div class="modal-body">
+                        <p>选择你的情况：</p>
+
+                        <h4>👔 忙碌上班族</h4>
+                        <p>没时间研究，只想省心 → 推荐朴门星球 + 一米市集</p>
+
+                        <h4>✨ 品质优先型</h4>
+                        <p>不差钱，只要最好的 → 推荐绿手指</p>
+
+                        <h4>💰 性价比优先型</h4>
+                        <p>精打细算，慢慢升级 → 推荐朴门星球</p>
+
+                        <h4>👶 有孩子家庭</h4>
+                        <p>关注孩子饮食安全 → 推荐绿手指 + 朴门星球</p>
+
+                        <a class="modal-cta" onclick="closeModal()">我的选择 →</a>
+                    </div>
+                `
+            }
+        };
+
+        function showModal(key) {
+            const modal = document.getElementById('modal');
+            const content = document.getElementById('modal-body-content');
+            const data = modalData[key];
+
+            if (data) {
+                content.innerHTML = `
+                    <h3 class="modal-title">${data.title}</h3>
+                    ${data.content}
+                `;
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            const modal = document.getElementById('modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // ESC close
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+</body>
+</html>
